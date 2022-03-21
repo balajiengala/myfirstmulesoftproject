@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="6cae120b-d061-41dc-8efc-6af5514b781c" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="helloworldFlow" doc:id="79b87316-4775-4940-9679-bc82f1732d24" >
+		<http:listener doc:name="Listener" doc:id="1ae51d91-9eec-4405-9d8d-dec0ad9b78af" config-ref="HTTP_Listener_config" path="helloworld"/>
+		<logger level="INFO" doc:name="Logger for student info" doc:id="6f11116f-40b5-4658-b89a-7540a60133ca" message="hi msg is received....................................................#[payload]"/>
+		<set-variable value="#[payload.Name]" doc:name="Set Variable for studentname" doc:id="d53a78cd-8b75-4ce9-b09b-56a4d5b7dced" variableName="studentname"/>
+		<set-variable value="#[payload]" doc:name="Set Variable for originalpayload" doc:id="ff3e1b31-577d-4fb7-8c13-730e3556bfe0" variableName="originalpayload"/>
+		<logger level="INFO" doc:name="logger to check variables" doc:id="ad25ed68-e45a-4c3b-abd9-22096ae5031f" message="studentname is #[vars.studentname] student details#[vars.originalpayload] and studentcourse is #[vars.originalpayload.course]" />
+		<flow-ref doc:name="Flow Reference for transforming to xml" doc:id="f5fd20b4-2092-4c6c-a7ef-759825e4c6cb" name="helloworldSub_Flow"/>
+		<logger level="INFO" doc:name="end logger" doc:id="7d7e6da7-e89e-4a92-9e17-f9af54245c6e" message=" #[payload]" />
+	</flow>
+	<sub-flow name="helloworldSub_Flow" doc:id="60bbc615-b5bf-43f0-b480-44312463702c" >
+		<ee:transform doc:name="Transform Message" doc:id="9885f58a-024a-467c-a55a-829b89247129">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+---
+{
+	test:payload
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+</mule>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<flow name="schedular_flowFlow" doc:id="eb362030-a990-4f36-bb5e-4d36e7e845e6" >
+		<scheduler doc:name="Scheduler" doc:id="5e4f9d50-341f-4009-998e-6e3e3a717f37" >
+			<scheduling-strategy >
+				<fixed-frequency timeUnit="MINUTES"/>
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="0a966982-8c4d-4e04-b32b-2f41860d75d3" message="#[payload]"/>
+		<set-payload value='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	&#10;}]' doc:name="Set Payload" doc:id="8bb31292-8921-4942-9987-9c457566d0fd" />
+		<flow-ref doc:name="Flow Reference for transformation to XML" doc:id="4ae59477-b325-4011-a20b-c0bcb5d9a40f" name="helloworldSub_Flow"/>
+		<logger level="INFO" doc:name="end logger" doc:id="852f542e-51ce-474d-be43-b9e5e3999b6e" message="#[payload]"/>
+	</flow>
+</mule>
